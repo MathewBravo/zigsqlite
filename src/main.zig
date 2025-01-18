@@ -1,4 +1,5 @@
 const std = @import("std");
+const commands = @import("commands.zig");
 
 pub fn main() !void {
     const stdin = std.io.getStdIn().reader();
@@ -9,13 +10,7 @@ pub fn main() !void {
         print_prompt();
         const user_input = try stdin.readUntilDelimiter(&buffer, '\n');
 
-        const trimmed_input = std.mem.trimRight(u8, user_input, "\r\n");
-
-        if (std.mem.eql(u8, trimmed_input, "exit")) {
-            std.process.exit(0);
-        } else {
-            try stdout.print("You entered: {s}\n", .{user_input});
-        }
+        try commands.command_handler(stdout, user_input);
     }
 }
 
